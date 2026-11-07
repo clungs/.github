@@ -8,7 +8,7 @@ Vale para todos os jogos da org. O `CLAUDE.md` de cada jogo traz as regras de c�
 2. **Spec** → a feature passa pela skill `tlc-spec-driven` (Specify → Design → Tasks). Cada fase é aprovada por uma pessoa.
 3. **Publicação** → com as Tasks aprovadas, o agente roda `gh-tasks publish`. Isso cria a issue da feature e um sub-issue por lote de worker, com bloqueio entre lotes dependentes, e grava os números no `tasks.md`.
 4. **Trabalho** → alguém pega um lote livre (`gh-tasks start <n>`), trabalha numa branch `feat/<n>-<slug>`, com commits `Refs #<n>`.
-5. **PR** → corpo com `Closes #<n>` do lote. O board move sozinho para *In Review*.
+5. **PR** → corpo com `Closes #<n>` do lote. O board move sozinho para *In Review*, e o PR herda o que faltar nele: você como assignee, as labels e a milestone do lote, e o Project.
 6. **Merge** → feito por uma pessoa. O lote fecha e vai para *Done*; quando o último lote fecha, a feature fecha junto.
 
 Bugs e chores pequenos pulam a spec: issue → branch `fix/<n>-<slug>` ou `chore/<n>-<slug>` → PR com `Closes #<n>`.
