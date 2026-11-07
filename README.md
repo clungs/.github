@@ -21,7 +21,7 @@ Rode, na raiz deste repo:
 python scripts/new_game_board.py clungs/<jogo>
 ```
 
-O script copia o Project marcado como template na org (campos, views e workflows vêm juntos), liga o repo do jogo e define a variável `PROJECT_NUMBER`. No fim ele lista o que só dá para fazer à mão:
+O script copia o Project marcado como template na org (campos, views e workflows vêm juntos), liga o repo do jogo, define a variável `PROJECT_NUMBER` e liga a exclusão automática da branch do PR no merge (repos criados por template não herdam essa opção). No fim ele lista o que só dá para fazer à mão:
 
 1. Ligar o workflow **Auto-add to project** do Project novo (repo do jogo, filtro `is:issue`): o GitHub nunca copia esse workflow.
 2. Criar o secret `PROJECT_TOKEN` no repo do jogo (`gh secret set PROJECT_TOKEN -R clungs/<jogo>`, colando o mesmo PAT). No plano Free, secrets de org não chegam a repos privados, então é um por repo.
