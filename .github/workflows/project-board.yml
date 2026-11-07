@@ -1,0 +1,26 @@
+# Workflow reutilizável: cada jogo chama este arquivo (veja workflow-templates/project-board.yml).
+name: Board do projeto
+
+on:
+  workflow_call:
+    inputs:
+      project-number:
+        description: Número do Project da org para este jogo (variável PROJECT_NUMBER do repo).
+        type: string
+        default: ""
+
+jobs:
+  board:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: clungs/.github
+          path: .clungs
+          sparse-checkout: scripts
+      - name: Atualiza o board
+        env:
+          GH_TOKEN: ${{ secrets.PROJECT_TOKEN }}
+          PROJECT_OWNER: ${{ github.repository_owner }}
+          PROJECT_NUMBER: ${{ inputs.project-number }}
+        run: python3 .clungs/scripts/board.py

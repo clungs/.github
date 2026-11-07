@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Dúvidas e ideias soltas
+    url: https://github.com/orgs/clungs/discussions
+    about: Para conversar antes de virar issue.

@@ -1,0 +1,14 @@
+name: Board do projeto
+
+on:
+  pull_request:
+    types: [opened, reopened, ready_for_review, converted_to_draft, review_requested]
+  issues:
+    types: [closed]
+
+jobs:
+  board:
+    uses: clungs/.github/.github/workflows/project-board.yml@main
+    with:
+      project-number: ${{ vars.PROJECT_NUMBER }}
+    secrets: inherit

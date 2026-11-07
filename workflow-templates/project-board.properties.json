@@ -1,0 +1,6 @@
+{
+  "name": "Board do projeto (Clungs)",
+  "description": "Move issues no Project conforme os PRs e fecha a feature quando todos os lotes fecham.",
+  "iconName": "octicon project",
+  "categories": ["Automation"]
+}

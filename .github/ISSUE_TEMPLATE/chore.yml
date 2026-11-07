@@ -1,0 +1,16 @@
+name: Chore
+description: Manutenção sem mudança de gameplay (atualizar addon, CI, refatoração, ferramentas).
+title: "[Área] "
+type: Chore
+body:
+  - type: textarea
+    id: oque
+    attributes:
+      label: O que fazer
+    validations:
+      required: true
+  - type: textarea
+    id: pronto
+    attributes:
+      label: Pronto quando
+      placeholder: "- [ ] ..."

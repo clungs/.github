@@ -1,0 +1,46 @@
+name: Bug
+description: Algo que não funciona como deveria.
+title: "[Área] bug: "
+type: Bug
+body:
+  - type: markdown
+    attributes:
+      value: Título no formato `[Área] bug: o que acontece`, por exemplo `[UI] bug: menu de pause não fecha com Esc`.
+  - type: textarea
+    id: acontece
+    attributes:
+      label: O que acontece
+    validations:
+      required: true
+  - type: textarea
+    id: passos
+    attributes:
+      label: Passos para reproduzir
+      placeholder: |
+        1. Abrir o jogo
+        2. ...
+    validations:
+      required: true
+  - type: textarea
+    id: esperado
+    attributes:
+      label: O que deveria acontecer
+    validations:
+      required: true
+  - type: input
+    id: versao
+    attributes:
+      label: Versão ou build
+      placeholder: v0.4.1, commit abc123, build do playtest de 07/11
+  - type: dropdown
+    id: origem
+    attributes:
+      label: De onde veio
+      options:
+        - Desenvolvimento
+        - Playtest
+        - Jogador
+  - type: textarea
+    id: anexos
+    attributes:
+      label: Prints, vídeo ou log
