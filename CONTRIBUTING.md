@@ -37,6 +37,7 @@ A issue aponta para a spec, não copia. Se divergirem, vale a spec.
 
 - Conventional Commits (`feat:`, `fix:`, `test:`, `refactor:`, `docs:`, `chore:`, `build:`, `ci:`) com `Refs #<n>` no corpo.
 - Um PR por lote. `Closes` só no lote, nunca na feature.
+- Nada vai direto para o `main`: tudo entra por PR. O plano Free não tem proteção de branch em repo privado, então cada jogo tem um hook de `pre-push` (`.githooks/`) que recusa push no `main`, e o workflow "Alerta de push no main" abre uma issue quando alguém passa por cima.
 - Ninguém faz merge do próprio PR sem uma segunda olhada, quando houver mais alguém no time.
 
 ## Labels

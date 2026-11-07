@@ -1,0 +1,14 @@
+name: Alerta de push no main
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  alert:
+    uses: clungs/.github/.github/workflows/main-push-alert.yml@main

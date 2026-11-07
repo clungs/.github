@@ -1,0 +1,6 @@
+{
+  "name": "Alerta de push no main (Clungs)",
+  "description": "Abre uma issue quando alguém empurra direto no main, sem PR.",
+  "iconName": "octicon alert",
+  "categories": ["Automation"]
+}

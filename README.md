@@ -11,6 +11,7 @@ Padrões que todos os repos da org Clungs herdam.
 | `labels.json` + `scripts/sync_labels.py` | Labels da org; sincronizadas pelo workflow `Sincroniza labels` |
 | `.github/workflows/project-board.yml` + `scripts/board.py` | Workflow reutilizável que move issues no Project conforme os PRs e completa assignee, labels, milestone e Project do PR |
 | `scripts/new_game_board.py` | Monta o Project de um jogo novo a partir do template da org |
+| `.github/workflows/main-push-alert.yml` + `scripts/main_push_alert.py` | Workflow reutilizável que abre uma issue quando alguém empurra direto no `main`, sem PR |
 | `workflow-templates/` | Workflow que cada jogo usa para chamar o de cima (aparece em Actions → New workflow) |
 
 ## Ligar um jogo ao board
@@ -25,6 +26,6 @@ O script copia o Project marcado como template na org (campos, views e workflows
 
 1. Ligar o workflow **Auto-add to project** do Project novo (repo do jogo, filtro `is:issue`): o GitHub nunca copia esse workflow.
 2. Criar o secret `PROJECT_TOKEN` no repo do jogo (`gh secret set PROJECT_TOKEN -R clungs/<jogo>`, colando o mesmo PAT). No plano Free, secrets de org não chegam a repos privados, então é um por repo.
-3. Se o jogo não veio do `godot-template`, copiar `workflow-templates/project-board.yml` para `.github/workflows/` do jogo.
+3. Se o jogo não veio do `godot-template`, copiar `workflow-templates/project-board.yml` e `workflow-templates/main-push-alert.yml` para `.github/workflows/` do jogo.
 
 Pode rodar de novo a qualquer momento: o que já está feito é pulado. Use `--dry-run` para só ver o que ele faria.
