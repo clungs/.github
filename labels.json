@@ -1,0 +1,21 @@
+[
+  { "name": "area:player",      "color": "1f6feb", "description": "Personagem, controles e habilidades" },
+  { "name": "area:ui",          "color": "1f6feb", "description": "Menus, HUD e loja" },
+  { "name": "area:level",       "color": "1f6feb", "description": "Mapas, arenas e cenários" },
+  { "name": "area:audio",       "color": "1f6feb", "description": "Música e efeitos sonoros" },
+  { "name": "area:network",     "color": "1f6feb", "description": "Multiplayer, lobby e rede" },
+  { "name": "area:tooling",     "color": "1f6feb", "description": "Ferramentas, scripts e harness" },
+  { "name": "area:build",       "color": "1f6feb", "description": "Export, release e CI" },
+
+  { "name": "art",              "color": "d4a72c", "description": "Disciplina: arte" },
+  { "name": "code",             "color": "d4a72c", "description": "Disciplina: programação" },
+  { "name": "design",           "color": "d4a72c", "description": "Disciplina: game design" },
+  { "name": "sfx",              "color": "d4a72c", "description": "Disciplina: áudio" },
+
+  { "name": "playtest",         "color": "bf3989", "description": "Veio de playtest" },
+  { "name": "perf",             "color": "bf3989", "description": "Desempenho" },
+  { "name": "godot-upgrade",    "color": "bf3989", "description": "Atualização de versão do Godot ou de addon" },
+
+  { "name": "needs-spec",       "color": "8250df", "description": "Ideia que ainda não passou pela tlc-spec-driven" },
+  { "name": "good-first-issue", "color": "2da44e", "description": "Boa para quem acabou de entrar" }
+]

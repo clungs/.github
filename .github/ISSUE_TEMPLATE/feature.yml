@@ -1,0 +1,33 @@
+name: Ideia de feature
+description: Algo novo para o jogo. Vira spec na tlc-spec-driven antes de ser trabalho.
+title: "[Área] "
+type: Feature
+labels: ["needs-spec"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Título no formato `[Área] Nome da feature`, por exemplo `[Player] Dash do player`.
+        Esta issue é a ideia. Quando a spec for aprovada, o agente publica os lotes como sub-issues e tira a label `needs-spec`.
+  - type: textarea
+    id: resumo
+    attributes:
+      label: Resumo
+      description: O que é, em duas ou três frases.
+    validations:
+      required: true
+  - type: textarea
+    id: porque
+    attributes:
+      label: Por quê
+      description: Que problema resolve ou que diversão acrescenta.
+  - type: textarea
+    id: referencias
+    attributes:
+      label: Referências
+      description: Prints, vídeos, links, um .md com a ideia.
+  - type: textarea
+    id: fora
+    attributes:
+      label: Fora de escopo
+      description: O que esta feature não vai fazer.
