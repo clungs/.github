@@ -9,7 +9,8 @@ O que faz (pode rodar de novo; o que já está feito é pulado):
      ou uma cópia nova do Project marcado como template na org (campos, views e workflows vêm juntos).
   2. Liga o repo ao Project.
   3. Define a variável PROJECT_NUMBER no repo.
-  4. Confere o que só dá para fazer à mão e diz como: workflow Auto-add, secret PROJECT_TOKEN
+  4. Liga "Automatically delete head branches" no repo (repos criados por template não herdam).
+  5. Confere o que só dá para fazer à mão e diz como: workflow Auto-add, secret PROJECT_TOKEN
      e o arquivo .github/workflows/project-board.yml no repo.
 
 Precisa do gh autenticado com escopos project, repo e read:org, e admin no repo (para a variável).
@@ -172,6 +173,13 @@ def main() -> int:
         print(f"{dry}definindo a variável PROJECT_NUMBER={number} em {args.repo}")
         if not args.dry_run:
             gh("variable", "set", "PROJECT_NUMBER", "-R", args.repo, "--body", number)
+
+    if gh("api", f"repos/{args.repo}", "--jq", ".delete_branch_on_merge").strip() == "true":
+        print("branch do PR já é apagada no merge")
+    else:
+        print(f"{dry}ligando \"apagar a branch do PR no merge\" em {args.repo}")
+        if not args.dry_run:
+            gh("api", "-X", "PATCH", f"repos/{args.repo}", "-F", "delete_branch_on_merge=true", "--silent")
 
     todo = []
     if not details["auto_add"]:
