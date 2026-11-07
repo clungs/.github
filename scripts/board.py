@@ -9,6 +9,12 @@ fechado ou PR mergeado -> Done) não é repetido aqui.
   Lote começa (In Progress/In Review)          -> feature-mãe sai de Todo para In Progress
   Último lote de uma feature fecha             -> feature-mãe fecha
 
+Nos mesmos eventos de PR, o PR herda o que falta nele:
+  sem assignee   -> o autor do PR
+  sem labels     -> as labels das issues do PR (menos as de triagem, como needs-spec)
+  sem milestone  -> a milestone da primeira issue do PR que tiver uma
+  fora do board  -> entra no Project (a view Board filtra is:issue, então não vira card)
+
 "Issues do PR" são as de "Closes #N" no corpo do PR.
 
 Variáveis: GH_TOKEN, GITHUB_EVENT_NAME, GITHUB_EVENT_PATH, PROJECT_OWNER, PROJECT_NUMBER.
@@ -125,14 +131,73 @@ def on_pull_request(event: dict, project: dict) -> None:
     else:
         return
 
-    data = graphql("""
+    node = graphql("""
         query($id: ID!) {
-          node(id: $id) { ... on PullRequest { closingIssuesReferences(first: 20) { nodes { id } } } }
-        }""", id=pr["node_id"])
-    for ref in data["node"]["closingIssuesReferences"]["nodes"]:
+          node(id: $id) {
+            ... on PullRequest {
+              id number
+              author { __typename ... on User { id login } }
+              assignees(first: 1) { totalCount }
+              labels(first: 1) { totalCount }
+              milestone { id }
+              projectItems(first: 20) { nodes { project { id } } }
+              closingIssuesReferences(first: 20) {
+                nodes { id labels(first: 30) { nodes { id name } } milestone { id title } }
+              }
+            }
+          }
+        }""", id=pr["node_id"])["node"]
+    issues = node["closingIssuesReferences"]["nodes"]
+    for ref in issues:
         issue = issue_by_id(ref["id"])
         set_status(issue, project, target)
         start_parent(issue, project)
+    try:
+        fill_pull_request(node, issues, project)
+    except RuntimeError as error:
+        print(f"::warning::PR #{node['number']}: não deu para completar assignee/labels/milestone/project: {error}")
+
+
+TRIAGE_LABELS = {"needs-spec", "good-first-issue", "good first issue", "help wanted"}
+
+
+def fill_pull_request(pr: dict, issues: list[dict], project: dict) -> None:
+    number = pr["number"]
+    author = pr["author"]
+    if pr["assignees"]["totalCount"] == 0 and author and author["__typename"] == "User":
+        graphql("""
+            mutation($pr: ID!, $user: ID!) {
+              addAssigneesToAssignable(input: {assignableId: $pr, assigneeIds: [$user]}) { clientMutationId }
+            }""", pr=pr["id"], user=author["id"])
+        print(f"PR #{number}: assignee {author['login']}")
+
+    if pr["labels"]["totalCount"] == 0:
+        labels: dict[str, str] = {}
+        for issue in issues:
+            for label in issue["labels"]["nodes"]:
+                if label["name"] not in TRIAGE_LABELS:
+                    labels.setdefault(label["name"], label["id"])
+        if labels:
+            graphql("""
+                mutation($pr: ID!, $labels: [ID!]!) {
+                  addLabelsToLabelable(input: {labelableId: $pr, labelIds: $labels}) { clientMutationId }
+                }""", pr=pr["id"], labels=list(labels.values()))
+            print(f"PR #{number}: labels {', '.join(labels)}")
+
+    milestone = next((issue["milestone"] for issue in issues if issue["milestone"]), None)
+    if pr["milestone"] is None and milestone:
+        graphql("""
+            mutation($pr: ID!, $milestone: ID!) {
+              updatePullRequest(input: {pullRequestId: $pr, milestoneId: $milestone}) { clientMutationId }
+            }""", pr=pr["id"], milestone=milestone["id"])
+        print(f"PR #{number}: milestone {milestone['title']}")
+
+    if not any(item["project"]["id"] == project["id"] for item in pr["projectItems"]["nodes"]):
+        graphql("""
+            mutation($project: ID!, $content: ID!) {
+              addProjectV2ItemById(input: {projectId: $project, contentId: $content}) { item { id } }
+            }""", project=project["id"], content=pr["id"])
+        print(f"PR #{number}: ligado ao Project")
 
 
 def on_issue_closed(event: dict) -> None:

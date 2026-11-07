@@ -9,7 +9,7 @@ Padrões que todos os repos da org Clungs herdam.
 | `.github/pull_request_template.md` | Template de PR padrão |
 | `CONTRIBUTING.md` | Fluxo de trabalho, títulos, labels |
 | `labels.json` + `scripts/sync_labels.py` | Labels da org; sincronizadas pelo workflow `Sincroniza labels` |
-| `.github/workflows/project-board.yml` + `scripts/board.py` | Workflow reutilizável que move issues no Project conforme os PRs |
+| `.github/workflows/project-board.yml` + `scripts/board.py` | Workflow reutilizável que move issues no Project conforme os PRs e completa assignee, labels, milestone e Project do PR |
 | `workflow-templates/` | Workflow que cada jogo usa para chamar o de cima (aparece em Actions → New workflow) |
 
 ## Ligar um jogo ao board
