@@ -1,0 +1,24 @@
+# Workflow reutilizável: cada jogo chama este arquivo (veja workflow-templates/main-push-alert.yml).
+# No plano Free não há proteção de branch em repo privado; isto não bloqueia, só avisa com uma issue.
+name: Alerta de push no main
+
+on:
+  workflow_call:
+
+jobs:
+  alert:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          repository: clungs/.github
+          path: .clungs
+          sparse-checkout: scripts
+      - name: Confere se o push veio de um PR
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 .clungs/scripts/main_push_alert.py

@@ -11,7 +11,7 @@ O que faz (pode rodar de novo; o que já está feito é pulado):
   3. Define a variável PROJECT_NUMBER no repo.
   4. Liga "Automatically delete head branches" no repo (repos criados por template não herdam).
   5. Confere o que só dá para fazer à mão e diz como: workflow Auto-add, secret PROJECT_TOKEN
-     e o arquivo .github/workflows/project-board.yml no repo.
+     e os workflows do board e do alerta de push no main no repo.
 
 Precisa do gh autenticado com escopos project, repo e read:org, e admin no repo (para a variável).
 """
@@ -25,7 +25,7 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stdout.reconfigure(encoding="utf-8")
     sys.stderr.reconfigure(encoding="utf-8")
 
-BOARD_WORKFLOW = ".github/workflows/project-board.yml"
+GAME_WORKFLOWS = [".github/workflows/project-board.yml", ".github/workflows/main-push-alert.yml"]
 
 
 def gh(*args: str, stdin: str | None = None) -> str:
@@ -114,9 +114,9 @@ def has_secret(full_repo: str, name: str) -> bool | None:
     return name in out.split()
 
 
-def has_board_workflow(full_repo: str) -> bool:
+def has_file(full_repo: str, path: str) -> bool:
     try:
-        gh("api", f"repos/{full_repo}/contents/{BOARD_WORKFLOW}", "--silent")
+        gh("api", f"repos/{full_repo}/contents/{path}", "--silent")
         return True
     except RuntimeError:
         return False
@@ -191,8 +191,10 @@ def main() -> int:
         todo.append(f"Não consegui listar os secrets de {args.repo}; confira se PROJECT_TOKEN existe.")
     elif not secret:
         todo.append(f"Crie o secret do token do board (cole o mesmo PAT dos outros jogos): gh secret set PROJECT_TOKEN -R {args.repo}")
-    if not has_board_workflow(args.repo):
-        todo.append(f"O repo não tem {BOARD_WORKFLOW}: copie workflow-templates/project-board.yml deste repo para lá.")
+    for path in GAME_WORKFLOWS:
+        if not has_file(args.repo, path):
+            name = path.rsplit("/", 1)[1]
+            todo.append(f"O repo não tem {path}: copie workflow-templates/{name} deste repo para lá.")
 
     if todo:
         print("\nFalta fazer à mão:")
